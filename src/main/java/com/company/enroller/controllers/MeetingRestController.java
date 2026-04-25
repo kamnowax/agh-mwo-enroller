@@ -2,16 +2,13 @@ package com.company.enroller.controllers;
 
 import java.util.Collection;
 
-import com.company.enroller.model.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import com.company.enroller.model.Meeting;
 import com.company.enroller.persistence.MeetingService;
-
 
 @RestController
 @RequestMapping("/meetings")
@@ -20,28 +17,39 @@ public class MeetingRestController {
     @Autowired
     MeetingService meetingService;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> getMeetings() {
-        Collection<Meeting> meetings = meetingService.getAll();
-        return new ResponseEntity<>(meetings, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Collection<Meeting>> getMeetings() {
+        return ResponseEntity.ok(meetingService.getAll());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> getMeeting(@PathVariable("id") long id) {
+    public ResponseEntity<Meeting> getMeeting(@PathVariable Long id) {
 
         Meeting meeting = meetingService.findById(id);
 
         if (meeting == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
 
-        return new ResponseEntity<>(meeting, HttpStatus.OK);
+        return ResponseEntity.ok(meeting);
     }
-//    @RequestMapping(value = "", method = RequestMethod.POST)
-//    public ResponseEntity<?> registerMeeting(@RequestBody Meeting meeting) {
-//        Meeting foundMeeting = meetingService.findByLogin(participant.getLogin());
-//        if (foundParticipant != null) {
-//            return new ResponseEntity<>("Already registered", HttpStatus.CONFLICT);
-//        }
-//        participantService.add(participant);
-//        return new ResponseEntity<>(participant, HttpStatus.CREATED);    }
+
+    @PostMapping
+    public ResponseEntity<?> registerMeeting(@RequestBody Meeting meeting) {
+
+        // sprawdz czy istnieje
+        if (meeting.getId() != 0) {
+            Meeting foundMeeting = meetingService.findById(meeting.getId());
+
+            if (foundMeeting != null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Already exists");
+            }
+        }
+
+        meetingService.add(meeting);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(meeting);
+    }
 }
