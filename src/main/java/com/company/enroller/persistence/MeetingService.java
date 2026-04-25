@@ -22,5 +22,11 @@ public class MeetingService {
 		Query query = connector.getSession().createQuery(hql);
 		return query.list();
 	}
+    public Meeting findById(long id) {
+        String hql = "FROM Meeting WHERE id = :id";
+        Query query = connector.getSession().createQuery(hql);
+        query.setParameter("id", id);
+        return (Meeting) query.uniqueResult();
+    }
 
 }
