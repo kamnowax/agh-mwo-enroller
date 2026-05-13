@@ -50,8 +50,15 @@ public class ParticipantService {
 
         transaction.commit();
     }
-    public List<Participant> getAll(String sortBy, String sortOrder) {
-        String hql = "FROM Participant";
+    public List<Participant> getAll(String sortBy,
+                                    String sortOrder,
+                                    String key) {
+
+        String hql = "FROM Participant WHERE 1=1";
+
+        if (key != null && !key.isEmpty()) {
+            hql += " AND login LIKE '%" + key + "%'";
+        }
 
         if (sortBy != null && sortOrder != null) {
             hql += " ORDER BY " + sortBy + " " + sortOrder;

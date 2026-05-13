@@ -71,13 +71,24 @@ public class ParticipantRestController {
 
         return new ResponseEntity<>(foundParticipant, HttpStatus.OK);
     }
+//    @GetMapping
+//    public ResponseEntity<?> getParticipantsSorted(
+//            @RequestParam(required = false) String sortBy,
+//            @RequestParam(required = false) String sortOrder) {
+//
+//        Collection<Participant> participants =
+//                participantService.getAll(sortBy, sortOrder);
+//
+//        return ResponseEntity.ok(participants);
+//    }
     @GetMapping
-    public ResponseEntity<?> getParticipantsSorted(
+    public ResponseEntity<?> getParticipantsSortedByLogin(
             @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String sortOrder) {
+            @RequestParam(required = false) String sortOrder,
+            @RequestParam(required = false) String key) {
 
         Collection<Participant> participants =
-                participantService.getAll(sortBy, sortOrder);
+                participantService.getAll(sortBy, sortOrder, key);
 
         return ResponseEntity.ok(participants);
     }

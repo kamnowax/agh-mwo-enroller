@@ -37,7 +37,6 @@ public class MeetingRestController {
     @PostMapping
     public ResponseEntity<?> registerMeeting(@RequestBody Meeting meeting) {
 
-        // sprawdz czy istnieje
         if (meeting.getId() != 0) {
             Meeting foundMeeting = meetingService.findById(meeting.getId());
 
@@ -52,4 +51,5 @@ public class MeetingRestController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(meeting);
     }
+
 }
