@@ -49,4 +49,11 @@ public class MeetingService {
 
         transaction.commit();
     }
+    public void update(Meeting meeting) {
+        Transaction transaction = connector.getSession().beginTransaction();
+
+        connector.getSession().update(meeting);
+
+        transaction.commit();
+    }
 }
