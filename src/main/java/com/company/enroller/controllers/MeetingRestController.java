@@ -2,6 +2,7 @@ package com.company.enroller.controllers;
 
 import java.util.Collection;
 
+import com.company.enroller.model.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,17 @@ public class MeetingRestController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(meeting);
     }
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteMeeting(@PathVariable("id") Long id) {
 
+        Meeting meeting = meetingService.findById(id);
+
+        if (meeting == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        meetingService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
