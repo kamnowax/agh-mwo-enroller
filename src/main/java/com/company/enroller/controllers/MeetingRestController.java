@@ -144,4 +144,8 @@ public class MeetingRestController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @GetMapping("/")
+    public String home() {
+        return "AGH MWO Enroller API is running";
+    }
 }
